@@ -34,6 +34,7 @@ form.addEventListener('submit', function (event) {
       if (data.hits.length > 0) {
         displayImages(data.hits);
       } else {
+        gallery.innerHTML = '';
         loader.classList.add('hide');
         iziToast.error({
           title: 'Error',
@@ -51,12 +52,10 @@ form.addEventListener('submit', function (event) {
     });
 });
 
-//рендер
 function displayImages(images) {
-  gallery.innerHTML = '';
-
   loader.classList.add('hide');
-  const lightbox = new SimpleLightbox('.gallery a');
+
+  const fragment = document.createDocumentFragment();
 
   images.forEach(image => {
     const li = document.createElement('li');
@@ -99,8 +98,12 @@ function displayImages(images) {
     a.appendChild(img);
     li.appendChild(a);
     li.appendChild(descContainer);
-    gallery.appendChild(li);
+    fragment.appendChild(li);
   });
 
+  gallery.innerHTML = '';
+  gallery.appendChild(fragment);
+
+  const lightbox = new SimpleLightbox('.gallery a');
   lightbox.refresh();
 }
